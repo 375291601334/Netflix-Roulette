@@ -1,0 +1,103 @@
+@import '../../Styles/variables.less';
+
+header {
+  padding: 20px 100px 100px;
+  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(../../../assets/img/films.jpeg);
+
+  .tablet({
+    padding: 20px 50px 50px;
+  });
+
+  .mobile({
+    padding: 20px 30px 30px;
+  });
+}
+
+.addButton {
+  float: right;
+  padding: 20px;
+  font-size: 20px;
+  font-family: @MontserratBoldFont;
+  border-radius: 5px;
+  background: @darkGreyTransparent;
+  color: @red;
+
+  .tablet({
+    padding: 10px;
+    font-size: 16px;
+  });
+
+  &:focus,
+  &:hover {
+    filter: brightness(190%);
+  }
+}
+
+.searchContainer {
+  padding: 50px;
+
+  .desktopSmall({
+    padding: 50px 0;
+  });
+
+  label {
+    font-size: 50px;
+    font-family: @MontserratLightFont;
+    color: @white;
+  }
+}
+
+.search {
+  margin-top: 50px;
+
+  input,
+  button {
+    box-sizing: border-box;
+    padding: 20px;
+    font-size: 20px;
+    border-radius: 5px;
+    color: @white;
+  }
+
+  input {
+    width: 78%;
+    margin-right: 2%;
+    background: linear-gradient(@darkGreyTransparent, @darkGrey, @darkGreyTransparent);
+
+    .tablet({
+      width: 100%;
+      margin-right: 0;
+      margin-bottom: 10px;
+    });
+
+    &::placeholder {
+      color: @black;
+      font-family: @MontserratMediumFont;
+    }
+
+    &:focus,
+    &:hover {
+      filter: brightness(190%);
+    }
+  }
+
+  button {
+    width: 20%;
+    background: @red;
+    font-family: @MontserratMediumFont;
+
+    .desktopSmall({
+      padding: 20px 10px;
+    });
+
+    .tablet({
+      width: 50%;
+      margin: 0 25%;
+    });
+
+    &:focus,
+    &:hover {
+      filter: contrast(190%);
+    }
+  }
+}

@@ -1,0 +1,26 @@
+// fonts
+@MontserratRegularFont: 'MontserratRegular';
+@MontserratMediumFont: 'MontserratMedium';
+@MontserratLightFont: 'MontserratLight';
+@MontserratBoldFont: 'MontserratBold';
+
+//colors
+@white: #fff;
+@black: #232323;
+@red: #f65261;
+@grey: #555;
+@darkGrey: #424242;
+@darkGreyTransparent:rgba(66, 66, 66, 0.7);
+
+//media queries
+.mobile(@rules) {
+  @media (max-width: 480px) { @rules(); } 
+}
+
+.tablet(@rules) {
+  @media (max-width: 760px) { @rules(); }
+}
+
+.desktopSmall(@rules) {
+  @media (max-width: 1024px) { @rules(); }
+}
