@@ -43,10 +43,21 @@ module.exports = env => {
         },
         {
           test: /\.less$/,
-          use: [isDevEnv ? 'style-loader' : MiniCssExtractPlugin.loader, 'css-loader', 'less-loader']
+          use: [
+            isDevEnv ? { loader: 'style-loader' } : MiniCssExtractPlugin.loader,
+            {
+              loader: 'css-loader',
+              options: {
+                modules: {
+                  localIdentName: '[name]__[local]--[hash:base64:5]',
+                },
+              }
+            },
+            { loader: 'less-loader' }
+          ]
         },
         {
-          test: /\.(png|jpe?g|gif|svg)$/i,
+          test: /\.(png|jpe?g|gif|svg|woff|woff2|eot|ttf)$/i,
           use: ['file-loader'],
         },
       ],

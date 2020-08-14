@@ -1,0 +1,61 @@
+@import '../../Styles/variables.less';
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  width: 33.33%;
+  padding: 20px 2.5%;
+  color: @white;
+
+  .tablet({
+    width: 50%;
+  });
+
+  .mobile({
+    width: 100%;
+    padding: 20px 0;
+  });
+
+  &:hover {
+    cursor: pointer;
+    filter: brightness(70%);
+
+    &::before {
+      content: '⋮';
+      position: absolute;
+      top: 5%;
+      right: 11%;
+      padding: 5px 20px;
+      font-size: 40px;
+      background: @darkGrey;
+      border-radius: 50%;
+      box-shadow: 0 0 10px @grey;
+    }
+  }
+
+  img {
+    flex: auto;
+    width: 100%;
+    min-height: 200px;
+    margin-bottom: 20px;
+    background-color: @black;
+  }
+
+  .mainInfoContainer {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+
+  h4 {
+    font-size: 20px;
+  }
+
+  .date {
+    padding: 5px 10px;
+    border: 1px solid @white;
+    border-radius: 3px; 
+  }
+}

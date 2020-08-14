@@ -9,5 +9,6 @@
     "moduleResolution": "node",
     "sourceMap": true
   },
+  "includes": ["./externals.d.ts"],
   "exclude": ["node_modules"]
 }
