@@ -29,6 +29,7 @@ module.exports = env => {
       new MiniCssExtractPlugin(),
       new HtmlWebpackPlugin({
         template: './index.html',
+        favicon: '../assets/icons/clapperboard.ico',
       })
     ],
     module: {
@@ -42,7 +43,7 @@ module.exports = env => {
           ],
         },
         {
-          test: /\.less$/,
+          test: /\.(css|less)$/,
           use: [
             isDevEnv ? { loader: 'style-loader' } : MiniCssExtractPlugin.loader,
             {
