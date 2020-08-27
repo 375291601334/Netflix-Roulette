@@ -1,1 +1,27 @@
-@import '../../Styles//globalStyles.less';
+@import '../../Styles/globalStyles.less';
+@import '../../Styles/variables.less';
+
+main {
+  flex: auto;
+  margin-top: 10px;
+  padding: 0 100px 40px;
+  background: @darkGrey;
+
+  .tablet({
+    padding: 0 50px 30px;
+  });
+
+  .mobile({
+    padding: 0 30px 30px;
+  });
+}
+
+.moviesContainer {
+  display: flex;
+  flex-wrap: wrap;
+  margin: -20px -2.5%;
+
+  .mobile({
+    margin: -20px 0;
+  });
+}

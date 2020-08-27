@@ -1,0 +1,158 @@
+@import '../../../Styles/variables.less';
+
+.wrapper {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 50px;
+  background: @darkGreyTransparent;
+  box-sizing: border-box;
+  overflow-y: scroll;
+
+  .tablet({
+    padding: 10px;
+  });
+
+  .mobile({
+    padding: 0;
+  });
+}
+
+.modalWindow {
+  position: relative;
+  min-width: 40%;
+  height: max-content;
+  margin: auto;
+  padding: 50px;
+  box-sizing: border-box;
+  background: @black;
+  color: @white;
+
+  h2 {
+    font-family: @MontserratMediumFont;
+    font-size: 50px;
+    text-align: center;
+
+    .tablet({
+      font-size: 30px;
+    });
+
+    .mobile({
+      font-size: 20px;
+    });
+  }
+
+  p {
+    margin: 30px 0;
+    font-size: 20px;
+    text-align: center;
+  }
+
+  fieldset {
+    display: flex;
+    flex-direction: column;
+    margin: 20px 0;
+  }
+
+  label {
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: @red;
+  }
+
+  input, select {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: @darkGrey;
+    color: @white;
+
+    &:-internal-autofill-selected {
+      background-color: @darkGrey;
+      color: @white;
+    }
+
+    &:focus,
+    &:hover {
+      filter: brightness(190%);
+    }
+  }
+
+  input[type="date"] {
+    &::-webkit-calendar-picker-indicator {
+      mask-image: url(../../../../assets/icons/calendar.svg);
+      -webkit-mask-image: url(../../../../assets/icons/calendar.svg);
+      mask-size: 25px 24px;
+      -webkit-mask-size: 25px 24px;
+      width: 20px;
+      height: 20px;
+      background: @red;
+    }
+
+    &::-webkit-datetime-edit {
+      color: transparent;
+    }
+
+    &:before {
+      content: attr(placeholder);
+      color: grey;
+    }
+
+    &:focus {
+      &:before {
+        content: none !important;
+      }
+
+      &::-webkit-datetime-edit {
+        color: @white !important;
+      }
+    }
+  }
+
+  button, input[type='submit'] {
+    width: fit-content;
+    padding: 10px 30px;
+    border-radius: 5px;
+    border: 1px solid @red;
+    font-size: 16px;
+    background: none;
+    color: @red;
+    cursor: pointer;
+
+    & ~ button,
+    & ~ input[type='submit'] {
+      margin-left: 20px;
+    }
+
+    &:focus,
+    &:hover {
+      filter: contrast(190%);
+    }
+
+    .mobile({
+      width: 100%;
+      padding: 15px;
+      font-size: 20px;
+      font-family: @MontserratBoldFont;
+
+      & ~ button ,
+      & ~ input[type='submit'] {
+        margin-left: 0;
+        margin-top: 20px;
+      }
+    });
+  }
+
+  .tablet({
+    min-width: 70%;
+  });
+
+  .mobile({
+    width: 100%;
+  })
+}

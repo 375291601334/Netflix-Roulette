@@ -1,0 +1,1 @@
+export { CongratulationsModal } from './CongratulationsModal';

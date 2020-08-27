@@ -1,5 +1,6 @@
 @import './reset.less';
 @import './fonts.less';
+@import './react-select.less';
 @import './variables.less';
 
 html {
@@ -20,4 +21,10 @@ input, button, select {
   display: flex;
   flex-direction: column;
   height: 100%;
+}
+
+button[data-ui='primary'],
+input[type='submit'][data-ui='primary'] {
+  background: @red;
+  color: @white;
 }
