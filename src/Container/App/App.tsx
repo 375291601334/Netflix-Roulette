@@ -1,124 +1,142 @@
-import React from 'react';
-import { Header, Navigation, MovieCard, Footer, Logo, Movie } from '../../Components';
+import React, { useState, useEffect, useCallback, ChangeEvent } from 'react';
+import { Header, Navigation, MovieCard, Footer, Logo, Movie, MovieDetails } from '../../Components';
 import { ErrorBoundary } from '../ErrorBoundary';
 import css from './App.less';
 
-export class App extends React.Component<
-  {}, {
-    searchString: string,
-    movies: Movie[],
-    genre: string,
-    sortingOption: string,
-    readyToShowMovies: Movie[],
-  }
-> {
-  constructor(props) {
-    super(props);
-    this.state = {
-      searchString: '',
-      movies: [],
-      genre: 'All',
-      sortingOption: 'release_date',
-      readyToShowMovies: [],
-    };
-  }
+export function App() {
+  const [movies, setMovies] = useState<Movie[]>([]);
+  const [readyToShowMovies, setReadyMovies] = useState<Movie[]>([]);
+  const [selectedMovieID, setSelectedMovieID] = useState<number>(undefined);
+  const [searchString, setSearchString] = useState<string>('');
+  const [genre, setGenre] = useState<string>('All');
+  const [sortingOption, setSortingOption] = useState<string>('release_date');
 
-  componentDidMount() {
-    const movies = require('../../movies.json');
-    this.setState({ movies });
-    this.setReadyToShowMovies({ movies });
-  }
+  useEffect(
+    () => {
+      const movies = require('../../movies.json');
+      setMovies(movies);
 
-  componentWillUnmount() {
-    console.log('App Component is unmountinting');
-  }
+      return console.log('App Component is unmountinting');
+    },
+    [],
+  );
 
-  shouldComponentUpdate(nextProps, nextState) {
-    return this.state === nextState ? false : true;
-  }
+  useEffect(
+    () => {
+      const readyToShowMovies = movies
+        .filter(movie =>
+          movie.title.toLocaleLowerCase().includes(searchString.toLowerCase()),
+        )
+        .filter(movie => genre === 'All' || movie.genres.includes(genre))
+        .sort((first, second) => {
+          if (first[sortingOption] > second[sortingOption]) return -1;
+          if (first[sortingOption] === second[sortingOption]) return 0;
+          if (first[sortingOption] < second[sortingOption]) return 1;
+        });
 
-  addMovie = (newMovie: Movie) => {
-    const movies = [...this.state.movies, newMovie];
-    this.setState({ movies });
-    this.setReadyToShowMovies({ movies });
-  }
+      setReadyMovies(readyToShowMovies);
+    },
+    [movies, searchString, genre, sortingOption],
+  );
 
-  editMovie = (editedMovie: Movie) => {
-    const movies = this.state.movies.map((movie) => {
+  const addMovie = useCallback(
+    (newMovie: Movie) => {
+      const newMovies = [...movies, newMovie];
+      setMovies(newMovies);
+    },
+    [movies],
+  );
+
+  const editMovie = (editedMovie: Movie) => {
+    const newMovies = movies.map((movie) => {
       if (movie.id === editedMovie.id) {
         return editedMovie;
       }
       return movie;
     });
-    this.setState({ movies });
-    this.setReadyToShowMovies({ movies });
-  }
+    setMovies(newMovies);
+  };
 
-  deleteMovie = (id: Movie['id']) => {
-    const movies = this.state.movies.filter(movie => movie.id !== id);
-    this.setState({ movies });
-    this.setReadyToShowMovies({ movies });
-  }
+  const deleteMovie = (id: Movie['id']) => {
+    unselectMovie();
+    const newMovies = movies.filter(movie => movie.id !== id);
+    setMovies(newMovies);
+  };
 
-  changeGenre = (genre: string) => {
-    this.setState({ genre });
-    this.setReadyToShowMovies({ genre });
-  }
+  const changeGenre = useCallback(
+    (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
+      const container = event.currentTarget;
+      const element = event.target as HTMLElement;
+      if (element === container) return;
 
-  changeSortingOption = (option: string) => {
-    this.setState({ sortingOption: option });
-    this.setReadyToShowMovies({ sortingOption: option });
-  }
+      Array.from(container.getElementsByClassName(css.active)).map(
+        element => element.classList.remove(css.active),
+      );
+      element.classList.add(css.active);
 
-  changeSearchString = (searchString: string) => {
-    this.setState({ searchString });
-    this.setReadyToShowMovies({ searchString });
-  }
+      setGenre(element.dataset.value);
+    },
+    [],
+  );
 
-  setReadyToShowMovies = (
-    data: { movies?: Movie[]; searchString?: string; sortingOption?: string; genre?: string },
-  ) => {
-    const { movies, searchString, sortingOption, genre } = { ...this.state, ...data };
-    const readyToShowMovies = movies
-      .filter(movie => movie.title.toLocaleLowerCase().includes(searchString.toLowerCase()))
-      .filter(movie => genre === 'All' || movie.genres.includes(genre))
-      .sort((first, second) => {
-        if (first[sortingOption] > second[sortingOption]) return -1;
-        if (first[sortingOption] === second[sortingOption]) return 0;
-        if (first[sortingOption] < second[sortingOption]) return 1;
-      });
-    this.setState({ readyToShowMovies });
-  }
+  const changeSortingOption = useCallback(
+    (event: ChangeEvent<HTMLSelectElement>) => {
+      setSortingOption(event.currentTarget.value);
+    },
+    [],
+  );
 
-  render() {
-    return (
-      <>
-        <Header addMovie={this.addMovie} searchMovie={this.changeSearchString}/>
-        <ErrorBoundary>
-          <main>
-            <Navigation
-              moviesNumber={this.state.readyToShowMovies.length}
-              changeGenre={this.changeGenre}
-              changeSortingOption={this.changeSortingOption}
-            />
-            <div className={css.moviesContainer}>
-              {this.state.readyToShowMovies.map((movie) => {
-                return (
-                  <MovieCard
-                    key={movie.id}
-                    movie={movie}
-                    deleteMovie={this.deleteMovie}
-                    editMovie={this.editMovie}
-                  />
-                );
-              })}
-            </div>
-          </main>
-        </ErrorBoundary>
-        <Footer>
-          <Logo />
-        </Footer>
-      </>
-    );
-  }
+  const changeSearchString = useCallback(
+    (searchString: string) => {
+      setSearchString(searchString);
+    },
+    [],
+  );
+
+  const selectMovie = (id: Movie['id']) => {
+    setSelectedMovieID(id);
+  };
+
+  const unselectMovie = () => {
+    setSelectedMovieID(undefined);
+  };
+
+  return (
+    <>
+      {selectedMovieID ? (
+        <MovieDetails
+          movie={movies.find(({ id }) => id === selectedMovieID)}
+          unselectMovie={unselectMovie}
+        />
+      ) : (
+        <Header addMovie={addMovie} searchMovie={changeSearchString}/>
+      )}
+      <ErrorBoundary>
+        <main>
+          <Navigation
+            moviesNumber={readyToShowMovies.length}
+            changeGenre={changeGenre}
+            changeSortingOption={changeSortingOption}
+            activeGenreClass={css.active}
+          />
+          <div className={css.moviesContainer}>
+            {readyToShowMovies.map((movie) => {
+              return (
+                <MovieCard
+                  key={movie.id}
+                  movie={movie}
+                  deleteMovie={deleteMovie}
+                  editMovie={editMovie}
+                  selectMovie={selectMovie}
+                />
+              );
+            })}
+          </div>
+        </main>
+      </ErrorBoundary>
+      <Footer>
+        <Logo />
+      </Footer>
+    </>
+  );
 }
