@@ -1,0 +1,117 @@
+@import '../../Styles/variables.less';
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  padding: 20px 100px;
+  background: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.9)), url(../../../assets/img/films.jpeg);
+  color: @white;
+
+  .tablet({
+    padding: 20px 50px 50px;
+  });
+
+  .mobile({
+    padding: 20px 30px 30px;
+  });
+
+  h2 {
+    display: inline-block;
+    font-size: 40px;
+    margin-right: 40px;
+  }
+}
+
+.searchBar {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .searchIcon {
+    display: inline-block;
+    mask-image: url(../../../assets/icons/loupe.svg);
+    -webkit-mask-image: url(../../../assets/icons/loupe.svg);
+    mask-size: 15px 20px;
+    -webkit-mask-size: 15px 20px;
+    width: 15px;
+    height: 20px;
+    background: @red;
+    cursor: pointer;
+
+    &:hover {
+      position: absolute;
+      top: 0;
+      right: 0;
+      filter: contrast(190%);
+      mask-size: 35px 40px;
+      -webkit-mask-size: 35px 40px;
+      width: 35px;
+      height: 40px;
+    }
+  }
+}
+
+.movieInfo {
+  display: flex;
+  flex-wrap: nowrap;
+  margin: 30px 0;
+
+  > *:not(:last-child) {
+    margin-right: 40px;
+  }
+
+  .mobile({
+    flex-direction: column;
+
+    > *:not(:last-child) {
+      margin-bottom: 40px;
+    }
+  });
+}
+
+.poster {
+  width: 40%;
+  max-height: 400px;
+  background-color: @darkGreyTransparent;
+
+  .mobile({
+    width: 100%;
+    min-height: 400px;
+  });
+}
+
+.mainInfoContainer {
+  width: 60%;
+
+  > *:not(:last-child) {
+    margin-bottom: 20px;
+  }
+
+  .mobile({
+    width: 100%;
+  });
+}
+
+.numberCharacteristics {
+  color: @red;
+  font-size: 20px;
+
+  > *:not(:last-child) {
+    margin-right: 40px;
+  }
+}
+
+.votes {
+  display: inline-block;
+  width: 60px;
+  height: 60px;
+  padding: 15px 0 0 0;
+  font-size: 30px;
+  font-family: @MontserratBoldFont;
+  border: 1px solid @white;
+  box-sizing: border-box;
+  border-radius: 50%;
+  text-align: center;
+  color: green;
+}

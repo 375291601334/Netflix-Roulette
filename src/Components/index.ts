@@ -6,4 +6,5 @@ export { Header } from './Header';
 export { Logo } from './Logo';
 export { ModalWindowWrapper } from './ModalWindowWrapper';
 export { MovieCard, Movie } from './MovieCard';
+export { MovieDetails } from './MovieDetails';
 export { Navigation } from './Navigation';
