@@ -1,25 +1,16 @@
 import React, { useState, useEffect, useCallback, ChangeEvent } from 'react';
+import { connect } from 'react-redux';
+import { addMovie, updateMovie, deleteMovie } from '../../Store';
 import { Header, Navigation, MovieCard, Footer, Logo, Movie, MovieDetails } from '../../Components';
 import { ErrorBoundary } from '../ErrorBoundary';
 import css from './App.less';
 
-export function App() {
-  const [movies, setMovies] = useState<Movie[]>([]);
+const AppComponent = ({ movies, addMovie, updateMovie, deleteMovie }) => {
   const [readyToShowMovies, setReadyMovies] = useState<Movie[]>([]);
   const [selectedMovieID, setSelectedMovieID] = useState<number>(undefined);
   const [searchString, setSearchString] = useState<string>('');
   const [genre, setGenre] = useState<string>('All');
   const [sortingOption, setSortingOption] = useState<string>('release_date');
-
-  useEffect(
-    () => {
-      const movies = require('../../movies.json');
-      setMovies(movies);
-
-      return console.log('App Component is unmountinting');
-    },
-    [],
-  );
 
   useEffect(
     () => {
@@ -39,28 +30,17 @@ export function App() {
     [movies, searchString, genre, sortingOption],
   );
 
-  const addMovie = useCallback(
-    (newMovie: Movie) => {
-      const newMovies = [...movies, newMovie];
-      setMovies(newMovies);
-    },
-    [movies],
-  );
+  const addMovie = (newMovie: Movie) => {
+    dispatch(addMovie(newMovie));
+  };
 
   const editMovie = (editedMovie: Movie) => {
-    const newMovies = movies.map((movie) => {
-      if (movie.id === editedMovie.id) {
-        return editedMovie;
-      }
-      return movie;
-    });
-    setMovies(newMovies);
+    dispatch(updateMovie(editedMovie));
   };
 
   const deleteMovie = (id: Movie['id']) => {
     unselectMovie();
-    const newMovies = movies.filter(movie => movie.id !== id);
-    setMovies(newMovies);
+    this.props.deleteMovie(id);
   };
 
   const changeGenre = useCallback(
@@ -139,4 +119,10 @@ export function App() {
       </Footer>
     </>
   );
+};
+
+function mapStateToProps(state) {
+  return { movies: state };
 }
+
+export const App = connect(mapStateToProps, { addMovie, updateMovie, deleteMovie })(AppComponent);
