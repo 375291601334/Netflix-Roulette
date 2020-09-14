@@ -1,6 +1,0 @@
-export const actionTypes = {
-  FETCH_MOVIES: 'FETCH_MOVIES',
-  ADD_MOVIE: 'ADD_MOVIE',
-  UPDATE_MOVIE: 'UPDATE_MOVIE',
-  DELETE_MOVIE: 'DELETE_MOVIE',
-};

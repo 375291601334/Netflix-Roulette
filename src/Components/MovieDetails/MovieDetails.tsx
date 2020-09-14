@@ -1,17 +1,25 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Logo } from '../Logo';
 import { Movie } from '../MovieCard';
 import css from './MovieDetails.less';
 
 export function MovieDetails(
-  { movie, unselectMovie }: { movie: Movie, unselectMovie: () => void },
+  { selectedMovie, unselectMovie }: { selectedMovie?: Movie, unselectMovie: () => void },
 ) {
+  const [movie, setMovie] = useState<Movie>({} as Movie);
   const posterStyle = {
     backgroundSize: 'contain',
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center',
     backgroundImage: `url(${movie.poster_path})`,
   };
+
+  useEffect(
+    () => {
+      selectedMovie && setMovie(selectedMovie);
+    },
+    [selectedMovie],
+  );
 
   return (
     <div className={css.wrapper}>
@@ -26,7 +34,7 @@ export function MovieDetails(
           <span className={css.votes}>{movie.vote_average}</span>
           <p>{movie.tagline}</p>
           <div className={css.numberCharacteristics}>
-            <span>{new Date(movie.release_date).getFullYear()}</span>
+            { movie.release_date && <span>{new Date(movie.release_date).getFullYear()}</span>}
             <span>{movie.runtime} min</span>
           </div>
           <div>{movie.overview}</div>

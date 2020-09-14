@@ -1,46 +1,38 @@
 import React, { useState, useEffect, useCallback, ChangeEvent } from 'react';
 import { connect } from 'react-redux';
-import { addMovie, updateMovie, deleteMovie } from '../../Store';
 import { Header, Navigation, MovieCard, Footer, Logo, Movie, MovieDetails } from '../../Components';
 import { ErrorBoundary } from '../ErrorBoundary';
+import { actions } from '../../Store';
 import css from './App.less';
 
-const AppComponent = ({ movies, addMovie, updateMovie, deleteMovie }) => {
+function AppComponent({
+  movies, loading, error,
+  fetchMovies, addMovie, updateMovie, deleteMovie, setFilteringOption, setSortingOption,
+}) {
   const [readyToShowMovies, setReadyMovies] = useState<Movie[]>([]);
   const [selectedMovieID, setSelectedMovieID] = useState<number>(undefined);
   const [searchString, setSearchString] = useState<string>('');
-  const [genre, setGenre] = useState<string>('All');
-  const [sortingOption, setSortingOption] = useState<string>('release_date');
 
   useEffect(
     () => {
-      const readyToShowMovies = movies
-        .filter(movie =>
-          movie.title.toLocaleLowerCase().includes(searchString.toLowerCase()),
-        )
-        .filter(movie => genre === 'All' || movie.genres.includes(genre))
-        .sort((first, second) => {
-          if (first[sortingOption] > second[sortingOption]) return -1;
-          if (first[sortingOption] === second[sortingOption]) return 0;
-          if (first[sortingOption] < second[sortingOption]) return 1;
-        });
-
-      setReadyMovies(readyToShowMovies);
+      fetchMovies();
     },
-    [movies, searchString, genre, sortingOption],
+    [],
   );
 
-  const addMovie = (newMovie: Movie) => {
-    dispatch(addMovie(newMovie));
-  };
+  useEffect(
+    () => {
+      const readyToShowMovies = movies.filter(
+        movie => movie.title.toLocaleLowerCase().includes(searchString.toLowerCase()),
+      );
+      setReadyMovies(readyToShowMovies);
+    },
+    [searchString, movies],
+  );
 
-  const editMovie = (editedMovie: Movie) => {
-    dispatch(updateMovie(editedMovie));
-  };
-
-  const deleteMovie = (id: Movie['id']) => {
+  const onDeleteMovie = (id: Movie['id']) => {
     unselectMovie();
-    this.props.deleteMovie(id);
+    deleteMovie(id);
   };
 
   const changeGenre = useCallback(
@@ -54,7 +46,7 @@ const AppComponent = ({ movies, addMovie, updateMovie, deleteMovie }) => {
       );
       element.classList.add(css.active);
 
-      setGenre(element.dataset.value);
+      setFilteringOption(element.dataset.value);
     },
     [],
   );
@@ -85,7 +77,7 @@ const AppComponent = ({ movies, addMovie, updateMovie, deleteMovie }) => {
     <>
       {selectedMovieID ? (
         <MovieDetails
-          movie={movies.find(({ id }) => id === selectedMovieID)}
+          selectedMovie={movies.find(({ id }) => id === selectedMovieID)}
           unselectMovie={unselectMovie}
         />
       ) : (
@@ -99,19 +91,26 @@ const AppComponent = ({ movies, addMovie, updateMovie, deleteMovie }) => {
             changeSortingOption={changeSortingOption}
             activeGenreClass={css.active}
           />
-          <div className={css.moviesContainer}>
-            {readyToShowMovies.map((movie) => {
-              return (
-                <MovieCard
-                  key={movie.id}
-                  movie={movie}
-                  deleteMovie={deleteMovie}
-                  editMovie={editMovie}
-                  selectMovie={selectMovie}
-                />
-              );
-            })}
-          </div>
+          {loading ? <div className={css.loader} /> :
+          error ? (
+            <h3>Error has occured!!! Please try again in few minutes...</h3>
+          ) : movies.length > 0 ? (
+            <div className={css.moviesContainer}>
+              {readyToShowMovies.map((movie) => {
+                return (
+                  <MovieCard
+                    key={movie.id}
+                    movie={movie}
+                    deleteMovie={onDeleteMovie}
+                    editMovie={updateMovie}
+                    selectMovie={selectMovie}
+                  />
+                );
+              })}
+            </div>
+          ) : (
+            <h3>No movies were found, add your own movies by clicking ADD MOVIE button.</h3>
+          )}
         </main>
       </ErrorBoundary>
       <Footer>
@@ -119,10 +118,81 @@ const AppComponent = ({ movies, addMovie, updateMovie, deleteMovie }) => {
       </Footer>
     </>
   );
-};
-
-function mapStateToProps(state) {
-  return { movies: state };
 }
 
-export const App = connect(mapStateToProps, { addMovie, updateMovie, deleteMovie })(AppComponent);
+function mapStateToProps({ movies, filtering, sorting }) {
+  const { data, loading, error } = movies;
+  return {
+    loading,
+    error,
+    movies: data
+      .filter(movie => filtering === 'All' || movie.genres.includes(filtering))
+      .sort((first, second) => {
+        if (first[sorting] > second[sorting]) return -1;
+        if (first[sorting] === second[sorting]) return 0;
+        if (first[sorting] < second[sorting]) return 1;
+      }),
+  };
+}
+
+const mapDispatchToProps = dispatch => ({
+  fetchMovies: () => {
+    dispatch(actions.fetchMovies());
+    return fetch('http://localhost:4000/movies')
+      .then((response) => {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+        return response;
+      })
+      .then(res => res.json())
+      .then((json) => {
+        dispatch(actions.fetchMoviesSuccess(json.data));
+        return json.data;
+      })
+      .catch(error => dispatch(actions.fetchMoviesFailure(error)));
+  },
+
+  deleteMovie: (movieID) => {
+    fetch(`http://localhost:4000/movies/${movieID}`, { method: 'DELETE' })
+      .then((response) => {
+        if (!response.ok) {
+          dispatch(actions.fetchMoviesFailure(response.statusText));
+          return;
+        }
+        dispatch(actions.deleteMovie(movieID));
+      });
+  },
+
+  updateMovie: (movie) => {
+    fetch('http://localhost:4000/movies', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(movie) })
+      .then((response) => {
+        if (!response.ok) {
+          dispatch(actions.fetchMoviesFailure(response.statusText));
+          return;
+        }
+        dispatch(actions.updateMovie(movie));
+      });
+  },
+
+  addMovie: (movie) => {
+    fetch('http://localhost:4000/movies', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(movie) })
+      .then((response) => {
+        if (!response.ok) {
+          throw Error(response.statusText);
+        }
+        return response;
+      })
+      .then(res => res.json())
+      .then((json) => {
+        dispatch(actions.addMovie(json));
+        return json.data;
+      })
+      .catch(error => dispatch(actions.fetchMoviesFailure(error)));
+  },
+
+  setFilteringOption: filteringOption => dispatch(actions.setFilteringOption(filteringOption)),
+  setSortingOption: sortingOption => dispatch(actions.setSortingOption(sortingOption)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(AppComponent);
