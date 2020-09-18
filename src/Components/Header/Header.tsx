@@ -18,8 +18,7 @@ export function Header({ addMovie, searchMovie }:
   const submitAddForm = (formData: Partial<Movie>) => {
     const newMovie = {
       ...formData,
-      id: new Date().getTime(),
-      tagline: '',
+      tagline: 'Tagline',
       vote_average: +(Math.random() * 10).toFixed(1),
       vote_count: Math.round(Math.random() * 1000),
       budget: Math.round(+Math.random().toFixed(2) * Math.pow(10, 9)),
