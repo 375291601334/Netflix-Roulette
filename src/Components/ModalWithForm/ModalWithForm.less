@@ -26,3 +26,19 @@ input[type='date'].full {
   border-width: 7px 7px 0 7px;
   border-color: @red transparent transparent transparent;
 }
+
+.notValid {
+  border: 1px solid @red;
+  border-radius: 5px;
+}
+
+.error {
+  margin-top: 5px;
+  font-size: 12px;
+  color: @red;
+}
+
+input[type='submit']:disabled {
+  background: @grey !important;
+  border-color: @darkGrey !important;
+}
