@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Formik, Form, Field, FieldProps } from 'formik';
+import { Formik, Form, Field, useField } from 'formik';
 import * as Yup from 'yup';
 import Select, { components } from 'react-select';
 import { Movie } from '../MovieCard';
@@ -97,15 +97,7 @@ export function ModalWithForm({ movie, onReset, onSubmit }:
             </fieldset>
             <fieldset>
               <label htmlFor="genres">GENRE</label>
-              <Field
-                name="genres"
-                component={SelectField}
-                options={genres}
-              />
-              {errors.genres && touched.genres
-                ? (<div className={css.error}>{errors.genres}</div>)
-                : null
-              }
+              <SelectField options={genres} name="genres" />
             </fieldset>
             <fieldset>
               <label htmlFor="overview">OVERVIEW</label>
@@ -142,7 +134,9 @@ export function ModalWithForm({ movie, onReset, onSubmit }:
     </>
   );
 
-  function SelectField({ options, field, form }) {
+  function SelectField({ options, name }) {
+    const [field, meta, helpers] = useField(name);
+
     const handleSelectChange = (option: Option[]) => {
       const values = option.reduce(
         (values, option) => {
@@ -152,21 +146,27 @@ export function ModalWithForm({ movie, onReset, onSubmit }:
         [],
       );
 
-      form.setFieldValue(field.name, values);
-      !form.touched[field.name] && form.setFieldTouched(field.name, true);
+      helpers.setValue(values);
+      !meta.touched && helpers.setTouched(true);
     };
 
     return (
-      <Select
-        name={field.name}
-        isMulti={true}
-        options={options}
-        className={form.errors.genres && form.touched.genres ? css.notValid : ''}
-        classNamePrefix="react-select"
-        components={{ DropdownIndicator: dropdownIndicator }}
-        value={(field.value || []).map(genre => ({ label: genre, value: genre }))}
-        onChange={handleSelectChange}
-      />
+      <>
+        <Select
+          name={name}
+          isMulti={true}
+          options={options}
+          className={meta.error && meta.touched ? css.notValid : ''}
+          classNamePrefix="react-select"
+          components={{ DropdownIndicator: dropdownIndicator }}
+          value={(field.value || []).map(genre => ({ label: genre, value: genre }))}
+          onChange={handleSelectChange}
+        />
+        {meta.error && meta.touched
+          ? (<div className={css.error}>{meta.error}</div>)
+          : null
+        }
+      </>
     );
   }
 }
