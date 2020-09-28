@@ -55,75 +55,58 @@ export function ModalWithForm({ movie, onReset, onSubmit }:
                 {movie.id}
               </fieldset>
             )}
-            <fieldset>
-              <label htmlFor="title">TITLE</label>
-              <Field
-                name="title"
-                placeholder="Movie title"
-                className={errors.title && touched.title && css.notValid}
-              />
-              {errors.title && touched.title
-                ? (<div className={css.error}>{errors.title}</div>)
-                : null
+            <FormField
+              fieldName="title"
+              type="string"
+              label="TITLE"
+              placeholder="Movie title"
+              error={errors.title as string}
+              touched={touched.title as boolean}
+            />
+            <FormField
+              fieldName="release_date"
+              type="date"
+              label="RELEASE DATE"
+              placeholder="Select release date"
+              error={errors.release_date as string}
+              touched={touched.release_date as boolean}
+              className={
+                `${values.release_date ? css.full : ''}
+                ${errors.release_date && touched.release_date ? css.notValid : ''}`
               }
-            </fieldset>
-            <fieldset>
-              <label htmlFor="release_date">RELEASE DATE</label>
-              <Field
-                type="date"
-                name="release_date"
-                placeholder="Select release date"
-                className={
-                  `${values.release_date ? css.full : ''}
-                  ${errors.release_date && touched.release_date ? css.notValid : ''}`
-                }
-              />
-              {errors.release_date && touched.release_date
-                ? (<div className={css.error}>{errors.release_date}</div>)
-                : null
-              }
-            </fieldset>
-            <fieldset>
-              <label htmlFor="poster_path">MOVIE URL</label>
-              <Field
-                name="poster_path"
-                placeholder="Movie url"
-                className={errors.poster_path && touched.poster_path ? css.notValid : ''}
-              />
-              {errors.poster_path && touched.poster_path
-                ? (<div className={css.error}>{errors.poster_path}</div>)
-                : null
-              }
-            </fieldset>
-            <fieldset>
-              <label htmlFor="genres">GENRE</label>
+            />
+            <FormField
+              fieldName="poster_path"
+              type="string"
+              label="MOVIE URL"
+              placeholder="Movie url"
+              error={errors.poster_path as string}
+              touched={touched.poster_path as boolean}
+            />
+            <FormField
+              fieldName="genres"
+              label="GENRE"
+              error={errors.genres as string}
+              touched={touched.genres as boolean}
+            >
               <SelectField options={genres} name="genres" />
-            </fieldset>
-            <fieldset>
-              <label htmlFor="overview">OVERVIEW</label>
-              <Field
-                name="overview"
-                placeholder="Movie overview"
-                className={errors.overview && touched.overview ? css.notValid : ''}
-              />
-              {errors.overview && touched.overview
-                ? (<div className={css.error}>{errors.overview}</div>)
-                : null
-              }
-            </fieldset>
-            <fieldset>
-              <label htmlFor="runtime">RUNTIME</label>
-              <Field
-                type="number"
-                name="runtime"
-                placeholder="Movie runtime"
-                className={errors.runtime && touched.runtime ? css.notValid : ''}
-              />
-              {errors.runtime && touched.runtime
-                ? (<div className={css.error}>{errors.runtime}</div>)
-                : null
-              }
-            </fieldset>
+            </FormField>
+            <FormField
+              fieldName="overview"
+              type="string"
+              label="OVERVIEW"
+              placeholder="Movie overview"
+              error={errors.overview as string}
+              touched={touched.overview as boolean}
+            />
+            <FormField
+              fieldName="runtime"
+              type="number"
+              label="RUNTIME"
+              placeholder="Movie runtime"
+              error={errors.runtime as string}
+              touched={touched.runtime as boolean}
+            />
             <div className={css.buttons}>
               <button onClick={onReset}>RESET</button>
               <input type="submit" data-ui="primary" value="SUBMIT" disabled={!isValid || !dirty} />
@@ -147,6 +130,9 @@ export function ModalWithForm({ movie, onReset, onSubmit }:
       );
 
       helpers.setValue(values);
+    };
+
+    const handleMenuClose = () => {
       !meta.touched && helpers.setTouched(true);
     };
 
@@ -161,12 +147,40 @@ export function ModalWithForm({ movie, onReset, onSubmit }:
           components={{ DropdownIndicator: dropdownIndicator }}
           value={(field.value || []).map(genre => ({ label: genre, value: genre }))}
           onChange={handleSelectChange}
+          onMenuClose={handleMenuClose}
         />
-        {meta.error && meta.touched
-          ? (<div className={css.error}>{meta.error}</div>)
+      </>
+    );
+  }
+
+  function FormField({ fieldName, type, label, placeholder, error, touched, className, children }:
+    {
+      fieldName: string;
+      label: string;
+      error: string;
+      touched: boolean;
+      type?: string;
+      placeholder?: string;
+      className?: string;
+      children?: JSX.Element;
+    },
+  ) {
+    return (
+      <fieldset>
+        <label htmlFor={fieldName}>{label}</label>
+        {children || (
+          <Field
+            name={fieldName}
+            type={type}
+            placeholder={placeholder}
+            className={`${className} ${error && touched && css.notValid}`}
+          />
+        )}
+        {error && touched
+          ? (<div className={css.error}>{error}</div>)
           : null
         }
-      </>
+      </fieldset>
     );
   }
 }
