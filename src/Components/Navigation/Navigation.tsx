@@ -34,7 +34,7 @@ export function Navigation(
         </div>
       </nav>
       <div className={css.postNavigation}>
-        <div className={css.counting}>{moviesNumber} movies found</div>
+        {!!moviesNumber && <div className={css.counting}>{moviesNumber} movies found</div>}
         <div className={css.mobileSorting}>
           <label>SORT BY</label>
           <select onChange={changeSortingOption}>

@@ -1,47 +1,16 @@
 @import '../../Styles/globalStyles.less';
 @import '../../Styles/variables.less';
 
-main {
-  flex: auto;
-  margin-top: 10px;
-  padding: 0 100px 40px;
-  background: @darkGrey;
-  color: @white;
+.topLogo {
+  position: absolute;
+  top: 20px;
+  left: 100px;
 
   .tablet({
-    padding: 0 50px 30px;
+    left: 50px;
   });
 
   .mobile({
-    padding: 0 30px 30px;
+    left: 30px;
   });
-}
-
-.loader {
-  margin: auto;
-  border: 10px solid @grey;
-  border-top: 10px solid #3498db;
-  border-radius: 50%;
-  width: 60px;
-  height: 60px;
-  animation: spin 2s linear infinite;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-.moviesContainer {
-  display: flex;
-  flex-wrap: wrap;
-  margin: -20px -2.5%;
-
-  .mobile({
-    margin: -20px 0;
-  });
-}
-
-.active {
-  border-bottom: 3px solid @red;
 }

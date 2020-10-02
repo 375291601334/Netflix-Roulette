@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import { ModalWithForm } from '../ModalWithForm';
 import { DeleteModal } from '../DeleteModal';
 import { ModalWindowWrapper } from '../ModalWindowWrapper';
@@ -7,12 +8,11 @@ import { Movie } from './Movie.model';
 import { useToggle } from '../../Utilities';
 import css from './MovieCard.less';
 
-export function MovieCard({ movie, deleteMovie, editMovie, selectMovie }:
+export function MovieCard({ movie, deleteMovie, editMovie }:
   {
     movie: Movie,
     deleteMovie: (id: Movie['id']) => void,
     editMovie: (movie: Movie) => void,
-    selectMovie: (id: Movie['id']) => void,
   },
 ) {
   const [showEditModal, setShowEditModal] = useToggle(false);
@@ -46,13 +46,9 @@ export function MovieCard({ movie, deleteMovie, editMovie, selectMovie }:
     setShowDeleteModal();
   };
 
-  const onMovieCardClick = () => {
-    selectMovie(movie.id);
-  };
-
   return (
     <>
-      <div className={css.card} onClick={onMovieCardClick}>
+      <div className={css.cardContainer}>
         <span className={css.menuIcon} onClick={openMenu}>⋮</span>
         <div className={css.menu}>
           <button className={css.closeButton} onClick={closeMenu}>
@@ -61,15 +57,16 @@ export function MovieCard({ movie, deleteMovie, editMovie, selectMovie }:
           <div className={css.option} onClick={openEditModal}>Edit</div>
           <div className={css.option} onClick={openDeleteModal}>Delete</div>
         </div>
-
-        <img src={movie.poster_path} alt={`${movie.title} poster`} />
-        <div className={css.mainInfoContainer}>
-          <h4>{movie.title}</h4>
-          <span className={css.date}>
-            {new Date(movie.release_date).getFullYear()}
-          </span>
-        </div>
-        <p>{movie.genres.join(', ')}</p>
+        <Link className={css.card} to={`/films/${movie.id}`}>
+          <img src={movie.poster_path} alt={`${movie.title} poster`} />
+          <div className={css.mainInfoContainer}>
+            <h4>{movie.title}</h4>
+            <span className={css.date}>
+              {new Date(movie.release_date).getFullYear()}
+            </span>
+          </div>
+          <p>{movie.genres.join(', ')}</p>
+        </Link>
       </div>
       {
         showDeleteModal ? (
@@ -97,14 +94,14 @@ MovieCard.propTypes = {
   movie: PropTypes.exact({
     id: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
-    tagline: PropTypes.string.isRequired,
-    vote_average: PropTypes.number.isRequired,
-    vote_count: PropTypes.number.isRequired,
-    release_date: PropTypes.string.isRequired,
+    tagline: PropTypes.string,
+    vote_average: PropTypes.number,
+    vote_count: PropTypes.number,
+    release_date: PropTypes.string,
     poster_path: PropTypes.string.isRequired,
     overview: PropTypes.string.isRequired,
-    budget: PropTypes.number.isRequired,
-    revenue: PropTypes.number.isRequired,
+    budget: PropTypes.number,
+    revenue: PropTypes.number,
     genres: PropTypes.arrayOf(PropTypes.string).isRequired,
     runtime: PropTypes.number.isRequired,
   }).isRequired,

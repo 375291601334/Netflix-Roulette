@@ -1,0 +1,65 @@
+@import '../../Styles/variables.less';
+
+.container {
+  flex: auto;
+  padding: 20px 100px 40px;
+  display: flex;
+  flex-direction: column;
+  background: @darkGrey;
+  color: @white;
+
+  .tablet({
+    padding: 20px 50px 30px;
+  });
+
+  .mobile({
+    padding: 20px 30px 30px;
+  });
+}
+
+.content {
+  margin: auto;
+}
+
+.title {
+  font-size: 50px;
+  text-align: center;
+}
+
+.icon {
+  display: block;
+  margin: -40px auto;
+  mask-image: url(../../../assets/icons/404.svg);
+  -webkit-mask-image: url(../../../assets/icons/404.svg);
+  width: 350px;
+  height: 350px;
+  background: linear-gradient(@black, @red, @white);
+
+  .mobile({
+    width: 100%;
+  });
+}
+
+a {
+  text-decoration: none;
+}
+
+.homeButton {
+  display: block;
+  box-sizing: border-box;
+  padding: 20px;
+  margin: 0 auto;
+  font-size: 20px;
+  font-weight: bold;
+  border: 3px solid @grey;
+  border-radius: 5px;
+  background: none;
+  color: @red;
+  cursor: pointer;
+
+  &:focus,
+  &:hover {
+    background: @grey;
+    filter: contrast(190%);
+  }
+}

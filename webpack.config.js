@@ -12,6 +12,7 @@ module.exports = env => {
     output: {
       filename: 'main.js',
       path: path.join(__dirname, 'dist'),
+      publicPath: '/',
     },
     resolve: {
       modules: ['node_modules'],
@@ -21,7 +22,9 @@ module.exports = env => {
     devtool: isDevEnv ? 'inline-source-map' : 'source-map',
     ...(isDevEnv) && {
       devServer: {
-        contentBase: './dist',
+        contentBase: './',
+        historyApiFallback: true,
+        hot: true
       },
     },
     plugins: [
