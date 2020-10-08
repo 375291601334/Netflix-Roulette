@@ -11,10 +11,7 @@ export function App() {
       <Logo className={css.topLogo} />
       <ErrorBoundary>
         <Switch>
-          <Route path="/films">
-            <MainPage />
-          </Route>
-          <Route path="/search">
+          <Route path={['/films', '/search']}>
             <MainPage />
           </Route>
           <Redirect exact={true} from="/" to="/films"/>

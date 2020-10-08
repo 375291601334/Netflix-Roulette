@@ -1,17 +1,16 @@
 import React, { ChangeEvent, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Movie } from '../MovieCard';
 import { ModalWithForm } from '../ModalWithForm';
 import { CongratulationsModal } from '../CongratulationsModal';
 import { ModalWindowWrapper } from '../ModalWindowWrapper';
-import { useToggle } from '../../Utilities';
+import { useToggle, useQuery } from '../../Utilities';
 import css from './Header.less';
 
 export function Header({ addMovie }: { addMovie: (newMovie: Movie) => void }) {
-  const { search } = useLocation();
-  const queryParam = search.match(new RegExp('[?&]searchString=([^&]+).*$'));
-  const initialSearchString = queryParam ? queryParam[1] : '';
+  const query = useQuery();
+  const initialSearchString = query.get('searchString') || '';
 
   const [showAddModal, setShowAddModal] = useToggle(false);
   const [showCongratulationsModal, setShowCongratulationsModal] = useToggle(false);

@@ -1,7 +1,8 @@
 import React, { useEffect, useCallback, ChangeEvent } from 'react';
 import { connect } from 'react-redux';
 import { actions } from '../../Store';
-import { Switch, Route, useLocation, useHistory } from 'react-router-dom';
+import { Switch, Route, useHistory, useLocation } from 'react-router-dom';
+import { useQuery } from '../../Utilities';
 import { Header, MovieCard, MovieDetails, Navigation, Movie } from '../../Components';
 import css from './MainPage.less';
 
@@ -28,17 +29,18 @@ function MainPage(
     setSortingOption: (sortingOption: string) => void;
   },
 ) {
-  const location = useLocation();
   const history = useHistory();
+  const location = useLocation();
+  const query = useQuery();
+  const searchStringParam = query.get('searchString');
 
   useEffect(
     () => {
-      if (location.pathname === '/films' || !movies.length) {
-        fetchMovies();
-      }
-      if (location.pathname === '/search') {
-        const queryParam = location.search.match(new RegExp('[?&]searchString=([^&]+).*$'));
-        const searchStringParam = queryParam ? queryParam[1] : '';
+      if (
+        location.pathname === '/films' ||
+        !movies.length ||
+        searchStringParam
+      ) {
         fetchMovies(searchStringParam);
       }
     },
