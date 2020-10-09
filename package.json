@@ -9,6 +9,7 @@
     "type": "git",
     "url": "git+https://github.com/375291601334/Netflix-Roulette.git"
   },
+  "homepage": "https://375291601334.github.io/Netflix-Roulette/",
   "main": "index.js",
   "scripts": {
     "dev": "webpack-dev-server --env=development --open --hot",

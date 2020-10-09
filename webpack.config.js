@@ -12,7 +12,7 @@ module.exports = env => {
     output: {
       filename: 'main.js',
       path: path.join(__dirname, 'dist'),
-      publicPath: '/',
+      publicPath: isDevEnv ? '/': '/Netflix-Roulette/',
     },
     resolve: {
       modules: ['node_modules'],
@@ -62,7 +62,14 @@ module.exports = env => {
         },
         {
           test: /\.(png|jpe?g|gif|svg|woff|woff2|eot|ttf)$/i,
-          use: ['file-loader'],
+          use: [
+            {
+              loader: 'file-loader',
+              options: {
+                publicPath: '/'
+              }
+            },
+          ],
         },
       ],
     },

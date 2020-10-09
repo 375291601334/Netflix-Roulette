@@ -11,9 +11,11 @@ const store = createStore(
   (window as any).__REDUX_DEVTOOLS_EXTENSION__ && (window as any).__REDUX_DEVTOOLS_EXTENSION__(),
 );
 
+console.log(process.env.PUBLIC_URL);
+
 ReactDOM.render(
   (
-    <BrowserRouter>
+    <BrowserRouter basename="/Netflix-Roulette">
       <Provider store={store}>
         <App />
       </Provider>
