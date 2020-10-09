@@ -1,19 +1,20 @@
 import React, { ChangeEvent, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Logo } from '../Logo';
+import { Link } from 'react-router-dom';
 import { Movie } from '../MovieCard';
 import { ModalWithForm } from '../ModalWithForm';
 import { CongratulationsModal } from '../CongratulationsModal';
 import { ModalWindowWrapper } from '../ModalWindowWrapper';
-import { useToggle } from '../../Utilities';
+import { useToggle, useQuery } from '../../Utilities';
 import css from './Header.less';
 
-export function Header({ addMovie, searchMovie }:
-  { addMovie: (newMovie: Movie) => void, searchMovie: (searchString: string) => void },
-) {
+export function Header({ addMovie }: { addMovie: (newMovie: Movie) => void }) {
+  const query = useQuery();
+  const initialSearchString = query.get('searchString') || '';
+
   const [showAddModal, setShowAddModal] = useToggle(false);
   const [showCongratulationsModal, setShowCongratulationsModal] = useToggle(false);
-  const [searchString, setSearchString] = useState<string>('');
+  const [searchString, setSearchString] = useState<string>(initialSearchString);
 
   const submitAddForm = (formData: Partial<Movie>) => {
     const newMovie = {
@@ -33,13 +34,8 @@ export function Header({ addMovie, searchMovie }:
     setSearchString(event.target.value);
   };
 
-  const onSearch = () => {
-    searchMovie(searchString);
-  };
-
   return (
     <header>
-      <Logo />
       <button className={css.addButton} onClick={setShowAddModal}>+ ADD MOVIE</button>
       <div className={css.searchContainer}>
         <label>FIND YOUR MOVIE</label>
@@ -48,8 +44,11 @@ export function Header({ addMovie, searchMovie }:
             type="text"
             placeholder="What do you want to watch?"
             onChange={handleInputChange}
+            defaultValue={searchString}
           />
-          <button onClick={onSearch}>SEARCH</button>
+          <Link className={css.searchButton} to={`/search?searchString=${searchString}`}>
+            SEARCH
+          </Link>
         </div>
       </div>
       {
@@ -72,5 +71,4 @@ export function Header({ addMovie, searchMovie }:
 
 Header.propTypes = {
   addMovie: PropTypes.func.isRequired,
-  searchMovie: PropTypes.func.isRequired,
 };

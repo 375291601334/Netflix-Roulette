@@ -22,33 +22,25 @@
   }
 }
 
-.searchBar {
-  position: relative;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.searchIcon {
+  display: inline-block;
+  align-self: flex-end;
+  mask-image: url(../../../assets/icons/loupe.svg);
+  -webkit-mask-image: url(../../../assets/icons/loupe.svg);
+  mask-size: 15px 20px;
+  -webkit-mask-size: 15px 20px;
+  width: 15px;
+  height: 20px;
+  background: @red;
+  cursor: pointer;
 
-  .searchIcon {
-    display: inline-block;
-    mask-image: url(../../../assets/icons/loupe.svg);
-    -webkit-mask-image: url(../../../assets/icons/loupe.svg);
-    mask-size: 15px 20px;
-    -webkit-mask-size: 15px 20px;
-    width: 15px;
-    height: 20px;
-    background: @red;
-    cursor: pointer;
-
-    &:hover {
-      position: absolute;
-      top: 0;
-      right: 0;
-      filter: contrast(190%);
-      mask-size: 35px 40px;
-      -webkit-mask-size: 35px 40px;
-      width: 35px;
-      height: 40px;
-    }
+  &:hover {
+    filter: contrast(190%);
+    mask-size: 35px 40px;
+    -webkit-mask-size: 35px 40px;
+    width: 35px;
+    height: 40px;
+    margin-bottom: -20px;
   }
 }
 

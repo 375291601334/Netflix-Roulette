@@ -50,8 +50,13 @@ header {
 .search {
   margin-top: 50px;
 
+  .tablet({
+    display: flex;
+    flex-direction: column;
+  });
+
   input,
-  button {
+  .searchButton {
     box-sizing: border-box;
     padding: 20px;
     font-size: 20px;
@@ -81,7 +86,7 @@ header {
     }
   }
 
-  button {
+  .searchButton {
     width: 20%;
     background: @red;
     font-family: @MontserratMediumFont;
@@ -92,7 +97,12 @@ header {
 
     .tablet({
       width: 50%;
-      margin: 0 25%;
+      margin: 0 auto;
+      text-align: center;
+    });
+
+    .mobile({
+      width: 100%;
     });
 
     &:focus,

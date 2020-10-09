@@ -1,1 +1,1 @@
-export { useToggle } from './customHooks';
+export { useToggle, useQuery } from './customHooks';
