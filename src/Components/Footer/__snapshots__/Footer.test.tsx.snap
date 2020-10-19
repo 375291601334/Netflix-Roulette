@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Footer render Footer 1`] = `
+<body>
+  <div>
+    <footer>
+      <span>
+        Logo
+      </span>
+    </footer>
+  </div>
+</body>
+`;

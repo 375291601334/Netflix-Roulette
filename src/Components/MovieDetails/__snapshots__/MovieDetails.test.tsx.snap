@@ -1,0 +1,51 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MovieDetails render MovieDetails 1`] = `
+<body>
+  <div>
+    <div
+      class="wrapper"
+    >
+      <a
+        class="searchIcon"
+        href="/films"
+      />
+      <div
+        class="movieInfo"
+      >
+        <div
+          class="poster"
+          style="background-size: contain; background-repeat: no-repeat; background-position: center; background-image: url(https://someImage.com);"
+        />
+        <div
+          class="mainInfoContainer"
+        >
+          <h2>
+            Movie title
+          </h2>
+          <span
+            class="votes"
+          >
+            7.3
+          </span>
+          <p />
+          <div
+            class="numberCharacteristics"
+          >
+            <span>
+              2020
+            </span>
+            <span>
+              123
+               min
+            </span>
+          </div>
+          <div>
+            Movie overview
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+`;

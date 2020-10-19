@@ -49,7 +49,7 @@ const moviesInitialState = {
   error: null,
 };
 
-export const movies = (state = moviesInitialState, { type, payload }) => {
+const movies = (state = moviesInitialState, { type, payload }) => {
   switch (type) {
     case actionTypes.FETCH_MOVIES:
       return { ...state, loading: true };
