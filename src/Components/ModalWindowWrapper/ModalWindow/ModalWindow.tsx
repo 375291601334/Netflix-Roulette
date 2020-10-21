@@ -21,15 +21,15 @@ export class ModalWindow extends React.Component<
 
   componentDidMount() {
     document.getElementsByTagName('body')[0].style.setProperty('overflow', 'hidden');
-    modalRoot.classList.add(css.wrapper);
-    modalRoot.appendChild(this.state.element);
+    document.getElementById('modalWindow').classList.add(css.wrapper);
+    document.getElementById('modalWindow').appendChild(this.state.element);
   }
 
   componentWillUnmount() {
     document.getElementsByTagName('body')[0].style.setProperty('overflow', 'auto');
 
-    modalRoot.removeChild(this.state.element);
-    modalRoot.classList.remove(css.wrapper);
+    document.getElementById('modalWindow').removeChild(this.state.element);
+    document.getElementById('modalWindow').classList.remove(css.wrapper);
   }
 
   render() {

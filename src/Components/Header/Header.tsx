@@ -54,7 +54,7 @@ export function Header({ addMovie }: { addMovie: (newMovie: Movie) => void }) {
       {
         showAddModal ? (
           <ModalWindowWrapper onClose={setShowAddModal}>
-            <ModalWithForm onReset={setShowAddModal} onSubmit={submitAddForm}/>
+            <ModalWithForm onReset={setShowAddModal} onSubmit={submitAddForm} />
           </ModalWindowWrapper>
         ) : null
       }

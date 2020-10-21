@@ -139,6 +139,7 @@ export function ModalWithForm({ movie, onReset, onSubmit }:
     return (
       <>
         <Select
+          inputId={name}
           name={name}
           isMulti={true}
           options={options}

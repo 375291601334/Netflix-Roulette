@@ -131,7 +131,7 @@ function MainPage(
   );
 }
 
-function mapStateToProps({ movies, filtering, sorting }) {
+export function mapStateToProps({ movies, filtering, sorting }) {
   const { data, loading, error } = movies;
   return {
     loading,
@@ -167,6 +167,7 @@ const mapDispatchToProps = dispatch => ({
   deleteMovie: (movieID) => {
     fetch(`http://localhost:4000/movies/${movieID}`, { method: 'DELETE' })
       .then((response) => {
+        console.log(response);
         if (!response.ok) {
           dispatch(actions.fetchMoviesFailure(response.statusText));
           return;

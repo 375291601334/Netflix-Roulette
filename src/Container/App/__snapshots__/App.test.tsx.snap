@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`App render App 1`] = `
+<body>
+  <div>
+    <div
+      class="logo topLogo"
+    >
+      <span>
+        netflix
+      </span>
+      roulette
+    </div>
+    <div>
+      Main Page
+    </div>
+    <footer>
+      <div
+        class="logo undefined"
+      >
+        <span>
+          netflix
+        </span>
+        roulette
+      </div>
+    </footer>
+  </div>
+</body>
+`;
