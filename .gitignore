@@ -1,3 +1,12 @@
+# dependencies
 /node_modules
+
+# production
 /dist
+
+# testing
 /coverage
+
+# next.js
+/.next/
+/out/

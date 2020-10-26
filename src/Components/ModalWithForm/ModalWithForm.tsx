@@ -2,10 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Formik, Form, Field, useField } from 'formik';
 import * as Yup from 'yup';
-import Select, { components } from 'react-select';
+import Select, { components, IndicatorProps, OptionTypeBase, ValueType } from 'react-select';
 import { Movie } from '../MovieCard';
 import css from './ModalWithForm.less';
-import { Option } from 'react-select/src/filters';
 
 const formValidationSchema = Yup.object().shape({
   title: Yup.string().required('This fileld is required!!!'),
@@ -15,6 +14,8 @@ const formValidationSchema = Yup.object().shape({
   genres: Yup.array().of(Yup.string()).required('This fileld is required!!!'),
   runtime: Yup.number().min(0).integer().required('This fileld is required!!!'),
 });
+
+type Option = { label: string; value: string };
 
 export function ModalWithForm({ movie, onReset, onSubmit }:
   { movie?: Movie, onReset: () => void, onSubmit: (formData: Partial<Movie>) => void },
@@ -27,7 +28,7 @@ export function ModalWithForm({ movie, onReset, onSubmit }:
     { label: 'Crime', value: 'Crime' },
   ];
 
-  const dropdownIndicator = (props) => {
+  const dropdownIndicator = (props: IndicatorProps<Option>) => {
     return (
       <components.DropdownIndicator {...props}>
         <span className={css.selectIcon} />
@@ -35,7 +36,7 @@ export function ModalWithForm({ movie, onReset, onSubmit }:
     );
   };
 
-  const formSubmit = (values) => {
+  const formSubmit = (values: Partial<Movie>) => {
     onSubmit({ ...movie, ...values });
   };
 
@@ -52,7 +53,7 @@ export function ModalWithForm({ movie, onReset, onSubmit }:
             {formType === 'edit' && (
               <fieldset>
                 <label>MOVIE ID</label>
-                {movie.id}
+                {movie?.id}
               </fieldset>
             )}
             <FormField
@@ -117,16 +118,16 @@ export function ModalWithForm({ movie, onReset, onSubmit }:
     </>
   );
 
-  function SelectField({ options, name }) {
+  function SelectField({ options, name }:{ options: Option[], name: string }) {
     const [field, meta, helpers] = useField(name);
 
-    const handleSelectChange = (option: Option[]) => {
-      const values = option.reduce(
+    const handleSelectChange = (value: Option[]) => {
+      const values = options.reduce(
         (values, option) => {
           values.push(option.value);
           return values;
         },
-        [],
+        [] as string[],
       );
 
       helpers.setValue(values);
@@ -146,7 +147,7 @@ export function ModalWithForm({ movie, onReset, onSubmit }:
           className={meta.error && meta.touched ? css.notValid : ''}
           classNamePrefix="react-select"
           components={{ DropdownIndicator: dropdownIndicator }}
-          value={(field.value || []).map(genre => ({ label: genre, value: genre }))}
+          value={(field.value || []).map((genre: string) => ({ label: genre, value: genre }))}
           onChange={handleSelectChange}
           onMenuClose={handleMenuClose}
         />

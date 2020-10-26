@@ -1,5 +1,4 @@
 import React from 'react';
-import { BrowserRouter } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
 import { render } from '@testing-library/react';
 import { MovieCard } from './MovieCard';
@@ -49,18 +48,14 @@ jest.mock('../ModalWithForm', () => ({
 describe('MovieCard', () => {
   test('render MovieCard', () => {
     const { baseElement } = render(
-      <BrowserRouter>
-        <MovieCard editMovie={editMovie} deleteMovie={deleteMovie} movie={movie} />
-      </BrowserRouter>,
+      <MovieCard editMovie={editMovie} deleteMovie={deleteMovie} movie={movie} />,
     );
     expect(baseElement).toMatchSnapshot();
   });
 
   test('open and close movie menu', () => {
     const { getByText, container } = render(
-      <BrowserRouter>
-        <MovieCard editMovie={editMovie} deleteMovie={deleteMovie} movie={movie} />
-      </BrowserRouter>,
+      <MovieCard editMovie={editMovie} deleteMovie={deleteMovie} movie={movie} />,
     );
 
     userEvent.click(getByText('⋮'));
@@ -75,9 +70,7 @@ describe('MovieCard', () => {
 
   test('open and submit Edit Movie Form modal window', () => {
     const { getByText, container } = render(
-      <BrowserRouter>
-        <MovieCard editMovie={editMovie} deleteMovie={deleteMovie} movie={movie} />
-      </BrowserRouter>,
+      <MovieCard editMovie={editMovie} deleteMovie={deleteMovie} movie={movie} />,
     );
 
     userEvent.click(getByText('⋮'));
@@ -90,9 +83,7 @@ describe('MovieCard', () => {
 
   test('open and submit Delete Movie modal window', () => {
     const { getByText, container } = render(
-      <BrowserRouter>
-        <MovieCard editMovie={editMovie} deleteMovie={deleteMovie} movie={movie} />
-      </BrowserRouter>,
+      <MovieCard editMovie={editMovie} deleteMovie={deleteMovie} movie={movie} />,
     );
 
     userEvent.click(getByText('⋮'));

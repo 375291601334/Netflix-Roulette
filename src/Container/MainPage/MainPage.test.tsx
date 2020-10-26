@@ -1,6 +1,5 @@
 import React from 'react';
 import userEvent from '@testing-library/user-event';
-import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { render } from '@testing-library/react';
 import fetchMock from 'jest-fetch-mock';
@@ -40,13 +39,15 @@ const movies = [
   },
 ];
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useLocation: jest.fn().mockReturnValue({
-    search: '?searchString=test',
-    pathname: '/films',
-  }),
-}));
+jest.mock('next/router', () => {
+  return {
+    useRouter: () => {
+      return {
+        query: {},
+      };
+    },
+  };
+});
 
 describe('MainPage', () => {
   beforeEach(() => {
@@ -65,11 +66,9 @@ describe('MainPage', () => {
     });
 
     const { baseElement } = render(
-      <BrowserRouter>
-        <Provider store={store}>
-          <MainPage />
-        </Provider>
-      </BrowserRouter>,
+      <Provider store={store}>
+        <MainPage />
+      </Provider>,
     );
 
     expect(baseElement).toMatchSnapshot();
@@ -87,11 +86,9 @@ describe('MainPage', () => {
     });
 
     const { getByText } = render(
-      <BrowserRouter>
-        <Provider store={store}>
-          <MainPage />
-        </Provider>
-      </BrowserRouter>,
+      <Provider store={store}>
+        <MainPage />
+      </Provider>,
     );
 
     expect(getByText('No movies found')).toBeTruthy();
@@ -109,11 +106,9 @@ describe('MainPage', () => {
     });
 
     const { getByText } = render(
-      <BrowserRouter>
-        <Provider store={store}>
-          <MainPage />
-        </Provider>
-      </BrowserRouter>,
+      <Provider store={store}>
+        <MainPage />
+      </Provider>,
     );
 
     expect(getByText('Error has occured! Try again in few minutes...')).toBeTruthy();
@@ -131,11 +126,9 @@ describe('MainPage', () => {
     });
 
     const { container } = render(
-      <BrowserRouter>
-        <Provider store={store}>
-          <MainPage />
-        </Provider>
-      </BrowserRouter>,
+      <Provider store={store}>
+        <MainPage />
+      </Provider>,
     );
 
     userEvent.click(container.querySelector('[data-value=Comedy]'));
@@ -154,11 +147,9 @@ describe('MainPage', () => {
     });
 
     const { getByRole } = render(
-      <BrowserRouter>
-        <Provider store={store}>
-          <MainPage />
-        </Provider>
-      </BrowserRouter>,
+      <Provider store={store}>
+        <MainPage />
+      </Provider>,
     );
 
     userEvent.selectOptions(getByRole('navigation').getElementsByTagName('select')[0], 'revenue');
@@ -177,11 +168,9 @@ describe('MainPage', () => {
     });
 
     const { getByRole } = render(
-      <BrowserRouter>
-        <Provider store={store}>
-          <MainPage />
-        </Provider>
-      </BrowserRouter>,
+      <Provider store={store}>
+        <MainPage />
+      </Provider>,
     );
 
     userEvent.selectOptions(getByRole('navigation').getElementsByTagName('select')[0], 'revenue');

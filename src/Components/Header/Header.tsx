@@ -1,20 +1,20 @@
 import React, { ChangeEvent, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
 import { Movie } from '../MovieCard';
 import { ModalWithForm } from '../ModalWithForm';
 import { CongratulationsModal } from '../CongratulationsModal';
 import { ModalWindowWrapper } from '../ModalWindowWrapper';
-import { useToggle, useQuery } from '../../Utilities';
+import { useToggle } from '../../Utilities';
 import css from './Header.less';
 
 export function Header({ addMovie }: { addMovie: (newMovie: Movie) => void }) {
-  const query = useQuery();
-  const initialSearchString = query.get('searchString') || '';
-
+  const router = useRouter();
+  const initialSearchString = router.query.searchString;
   const [showAddModal, setShowAddModal] = useToggle(false);
   const [showCongratulationsModal, setShowCongratulationsModal] = useToggle(false);
-  const [searchString, setSearchString] = useState<string>(initialSearchString);
+  const [searchString, setSearchString] = useState<string>(initialSearchString as string || '');
 
   const submitAddForm = (formData: Partial<Movie>) => {
     const newMovie = {
@@ -46,9 +46,11 @@ export function Header({ addMovie }: { addMovie: (newMovie: Movie) => void }) {
             onChange={handleInputChange}
             defaultValue={searchString}
           />
-          <Link className={css.searchButton} to={`/search?searchString=${searchString}`}>
-            SEARCH
-          </Link>
+          <div className={css.searchButton}>
+            <Link href={`/search?searchString=${searchString}`}>
+              SEARCH
+            </Link>
+          </div>
         </div>
       </div>
       {

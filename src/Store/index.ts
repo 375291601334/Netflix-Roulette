@@ -1,4 +1,7 @@
-import { combineReducers } from 'redux';
+import { useMemo } from 'react';
+import { combineReducers, createStore } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
+import { Movie } from '../Components';
 
 export const actionTypes = {
   FETCH_MOVIES: 'FETCH_MOVIES',
@@ -43,13 +46,27 @@ export const actions = {
   }),
 };
 
-const moviesInitialState = {
-  data: [],
-  loading: false,
-  error: null,
+export type State = {
+  movies: {
+    data: Movie[];
+    loading: boolean;
+    error: Error | null;
+  };
+  filtering: string;
+  sorting: string;
 };
 
-const movies = (state = moviesInitialState, { type, payload }) => {
+const initialState = {
+  movies: {
+    data: [],
+    loading: false,
+    error: null,
+  },
+  filtering: 'All',
+  sorting: 'release_date',
+};
+
+const movies = (state = initialState.movies, { type, payload }) => {
   switch (type) {
     case actionTypes.FETCH_MOVIES:
       return { ...state, loading: true };
@@ -77,14 +94,14 @@ const movies = (state = moviesInitialState, { type, payload }) => {
   }
 };
 
-const filtering = (state = 'All', { type, payload }) => {
+const filtering = (state = initialState.filtering, { type, payload }) => {
   if (type === actionTypes.SET_FILTERING_OPTION) {
     return payload;
   }
   return state;
 };
 
-const sorting = (state = 'release_date', { type, payload }) => {
+const sorting = (state = initialState.sorting, { type, payload }) => {
   if (type === actionTypes.SET_SORTING_OPTION) {
     return payload;
   }
@@ -96,3 +113,35 @@ export const rootReducer = combineReducers({
   filtering,
   sorting,
 });
+
+function initStore(preloadedState = initialState) {
+  return createStore(
+    rootReducer,
+    preloadedState,
+    composeWithDevTools(),
+  );
+}
+
+let store;
+
+export const initializeStore = (state?: State) => {
+  let currentStore = store ?? initStore(state);
+
+  if (state && store) {
+    currentStore = initStore({
+      ...store.getState(),
+      ...state,
+    });
+    store = undefined;
+  }
+
+  if (typeof window === 'undefined') return currentStore;
+  if (!store) store = currentStore;
+
+  return currentStore;
+};
+
+export function useStore(initialState: State) {
+  const store = useMemo(() => initializeStore(initialState), [initialState]);
+  return store;
+}

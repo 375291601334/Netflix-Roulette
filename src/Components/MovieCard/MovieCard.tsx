@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { useRouter } from 'next/router';
 import { ModalWithForm } from '../ModalWithForm';
 import { DeleteModal } from '../DeleteModal';
 import { ModalWindowWrapper } from '../ModalWindowWrapper';
@@ -15,6 +15,7 @@ export function MovieCard({ movie, deleteMovie, editMovie }:
     editMovie: (movie: Movie) => void,
   },
 ) {
+  const router = useRouter();
   const [showEditModal, setShowEditModal] = useToggle(false);
   const [showDeleteModal, setShowDeleteModal] = useToggle(false);
 
@@ -46,6 +47,10 @@ export function MovieCard({ movie, deleteMovie, editMovie }:
     setShowDeleteModal();
   };
 
+  const goToMovieDetails = () => {
+    router.push(`/films/${movie.id}`);
+  };
+
   return (
     <>
       <div className={css.cardContainer}>
@@ -57,7 +62,7 @@ export function MovieCard({ movie, deleteMovie, editMovie }:
           <div className={css.option} onClick={openEditModal}>Edit</div>
           <div className={css.option} onClick={openDeleteModal}>Delete</div>
         </div>
-        <Link className={css.card} to={`/films/${movie.id}`}>
+        <div className={css.card} onClick={goToMovieDetails}>
           <img src={movie.poster_path} alt={`${movie.title} poster`} />
           <div className={css.mainInfoContainer}>
             <h4>{movie.title}</h4>
@@ -66,7 +71,7 @@ export function MovieCard({ movie, deleteMovie, editMovie }:
             </span>
           </div>
           <p>{movie.genres.join(', ')}</p>
-        </Link>
+        </div>
       </div>
       {
         showDeleteModal ? (

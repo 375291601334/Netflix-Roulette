@@ -21,14 +21,17 @@ exports[`MainPage render MainPage 1`] = `
           <input
             placeholder="What do you want to watch?"
             type="text"
-            value="test"
+            value=""
           />
-          <a
+          <div
             class="searchButton"
-            href="/search?searchString=test"
           >
-            SEARCH
-          </a>
+            <a
+              href="/search?searchString="
+            >
+              SEARCH
+            </a>
+          </div>
         </div>
       </div>
     </header>
@@ -155,9 +158,8 @@ exports[`MainPage render MainPage 1`] = `
               Delete
             </div>
           </div>
-          <a
+          <div
             class="card"
-            href="/films/456"
           >
             <img
               alt="Movie 2 title poster"
@@ -178,7 +180,7 @@ exports[`MainPage render MainPage 1`] = `
             <p>
               Crime
             </p>
-          </a>
+          </div>
         </div>
         <div
           class="cardContainer"
@@ -211,9 +213,8 @@ exports[`MainPage render MainPage 1`] = `
               Delete
             </div>
           </div>
-          <a
+          <div
             class="card"
-            href="/films/123"
           >
             <img
               alt="Movie 1 title poster"
@@ -234,7 +235,7 @@ exports[`MainPage render MainPage 1`] = `
             <p>
               Comedy
             </p>
-          </a>
+          </div>
         </div>
       </div>
     </main>

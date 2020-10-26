@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Link, useParams } from 'react-router-dom';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
 import { Movie } from '../MovieCard';
 import css from './MovieDetails.less';
 
 export function MovieDetails({ getMovie }: { getMovie: (id: string) => Movie}) {
-  const [movie, setMovie] = useState<Movie>(undefined as Movie);
-  const { id } = useParams();
+  const [movie, setMovie] = useState<Movie>((undefined as unknown) as Movie);
+  const router = useRouter();
+  const { id } = router.query;
 
   useEffect(
     () => {
-      const selectedMovie = getMovie(id);
+      const selectedMovie = getMovie(id as string);
       setMovie(selectedMovie);
     },
     [id],
@@ -25,7 +27,7 @@ export function MovieDetails({ getMovie }: { getMovie: (id: string) => Movie}) {
 
   return (
     <div className={css.wrapper}>
-      <Link className={css.searchIcon} to={'/films'} />
+      <Link href={'/films'}><span className={css.searchIcon} /></Link>
       <div className={css.movieInfo}>
         <div className={css.poster} style={posterStyle} />
         <div className={css.mainInfoContainer}>

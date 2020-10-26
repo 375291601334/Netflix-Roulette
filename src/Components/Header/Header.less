@@ -87,9 +87,15 @@ header {
   }
 
   .searchButton {
+    display: inline-block;
     width: 20%;
     background: @red;
-    font-family: @MontserratMediumFont;
+    text-align: center;
+
+    a {
+      font-family: @MontserratMediumFont;
+      color: @white;
+    }
 
     .desktopSmall({
       padding: 20px 10px;

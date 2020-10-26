@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './Footer.less';
 
-export function Footer(props) {
+export function Footer({ children }: { children: JSX.Element }) {
   return (
-    <footer>{props.children}</footer>
+    <footer>{children}</footer>
   );
 }
 

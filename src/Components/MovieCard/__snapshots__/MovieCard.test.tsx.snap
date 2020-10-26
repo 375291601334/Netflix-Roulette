@@ -34,9 +34,8 @@ exports[`MovieCard render MovieCard 1`] = `
           Delete
         </div>
       </div>
-      <a
+      <div
         class="card"
-        href="/films/123"
       >
         <img
           alt="Movie title poster"
@@ -57,7 +56,7 @@ exports[`MovieCard render MovieCard 1`] = `
         <p>
           Comedy
         </p>
-      </a>
+      </div>
     </div>
   </div>
 </body>

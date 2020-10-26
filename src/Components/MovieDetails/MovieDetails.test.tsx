@@ -1,5 +1,4 @@
 import React from 'react';
-import { BrowserRouter } from 'react-router-dom';
 import { render } from '@testing-library/react';
 import { MovieDetails } from './MovieDetails';
 
@@ -18,14 +17,22 @@ const movie = {
   runtime: 123,
 };
 
+jest.mock('next/router', () => {
+  return {
+    useRouter: () => {
+      return {
+        query: { id: 123 },
+      };
+    },
+  };
+});
+
 const getMovie = jest.fn().mockReturnValue(movie);
 
 describe('MovieDetails', () => {
   test('render MovieDetails', () => {
     const { baseElement } = render(
-      <BrowserRouter>
-        <MovieDetails getMovie={getMovie} />
-      </BrowserRouter>,
+      <MovieDetails getMovie={getMovie} />,
     );
     expect(baseElement).toMatchSnapshot();
   });
