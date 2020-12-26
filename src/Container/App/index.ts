@@ -1,1 +1,1 @@
-export { App } from './App';
+export { App, getServerSideProps } from './App';

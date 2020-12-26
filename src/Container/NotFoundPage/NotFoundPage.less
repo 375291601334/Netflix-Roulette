@@ -1,4 +1,19 @@
+@import '../../Styles/globalStyles.less';
 @import '../../Styles/variables.less';
+
+.topLogo {
+  position: absolute;
+  top: 20px;
+  left: 100px;
+
+  .tablet({
+    left: 50px;
+  });
+
+  .mobile({
+    left: 30px;
+  });
+}
 
 .container {
   flex: auto;

@@ -1,2 +1,2 @@
 export { MovieCard } from './MovieCard';
-export { Movie } from './Movie.model';
+export type { Movie } from './Movie.model';

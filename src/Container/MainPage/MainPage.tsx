@@ -1,8 +1,7 @@
-import React, { useEffect, useCallback, ChangeEvent } from 'react';
+import React, { useCallback, ChangeEvent } from 'react';
 import { connect } from 'react-redux';
+import { useRouter } from 'next/router';
 import { actions } from '../../Store';
-import { Switch, Route, useHistory, useLocation } from 'react-router-dom';
-import { useQuery } from '../../Utilities';
 import { Header, MovieCard, MovieDetails, Navigation, Movie } from '../../Components';
 import css from './MainPage.less';
 
@@ -14,7 +13,6 @@ function MainPage(
     addMovie,
     updateMovie,
     deleteMovie,
-    fetchMovies,
     setFilteringOption,
     setSortingOption,
   }: {
@@ -24,28 +22,12 @@ function MainPage(
     addMovie: (movie: Movie) => void;
     updateMovie: (movie: Movie) => void;
     deleteMovie: (movieId: number) => void;
-    fetchMovies: (searchString?: string) => void;
     setFilteringOption: (filteringOption: string) => void;
     setSortingOption: (sortingOption: string) => void;
   },
 ) {
-  const history = useHistory();
-  const location = useLocation();
-  const query = useQuery();
-  const searchStringParam = query.get('searchString');
-
-  useEffect(
-    () => {
-      if (
-        location.pathname === '/films' ||
-        !movies.length ||
-        searchStringParam
-      ) {
-        fetchMovies(searchStringParam);
-      }
-    },
-    [location],
-  );
+  const router = useRouter();
+  const { id } = router.query;
 
   const onDeleteMovie = (id: Movie['id']) => {
     deleteMovie(id);
@@ -77,21 +59,14 @@ function MainPage(
   const getSelectedMovie = (id: string) => {
     const selectedMovie = movies.find(movie => movie.id === + id);
     if (!selectedMovie) {
-      history.replace('/films');
+      router.push('/films');
     }
     return selectedMovie;
   };
 
   return (
     <>
-      <Switch>
-        <Route exact={true} path="/films/:id">
-          <MovieDetails getMovie={getSelectedMovie} />
-        </Route>
-        <Route>
-          <Header addMovie={addMovie} />
-        </Route>
-      </Switch>
+      {id ? <MovieDetails getMovie={getSelectedMovie} /> : <Header addMovie={addMovie} />}
       <main>
         <Navigation
           moviesNumber={movies.length}
@@ -147,23 +122,6 @@ export function mapStateToProps({ movies, filtering, sorting }) {
 }
 
 const mapDispatchToProps = dispatch => ({
-  fetchMovies: (search?: string) => {
-    dispatch(actions.fetchMovies());
-    return fetch(`http://localhost:4000/movies?limit=18${search && `&searchBy=title&search=${search}`}`)
-      .then((response) => {
-        if (!response.ok) {
-          throw Error(response.statusText);
-        }
-        return response;
-      })
-      .then(res => res.json())
-      .then((json) => {
-        dispatch(actions.fetchMoviesSuccess(json.data));
-        return json.data;
-      })
-      .catch(error => dispatch(actions.fetchMoviesFailure(error)));
-  },
-
   deleteMovie: (movieID) => {
     fetch(`http://localhost:4000/movies/${movieID}`, { method: 'DELETE' })
       .then((response) => {

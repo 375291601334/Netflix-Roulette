@@ -6,9 +6,8 @@ exports[`MovieDetails render MovieDetails 1`] = `
     <div
       class="wrapper"
     >
-      <a
+      <span
         class="searchIcon"
-        href="/films"
       />
       <div
         class="movieInfo"

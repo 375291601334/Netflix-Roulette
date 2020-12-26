@@ -4,6 +4,14 @@ exports[`NotFoundPage render NotFoundPage 1`] = `
 <body>
   <div>
     <div
+      class="logo topLogo"
+    >
+      <span>
+        netflix
+      </span>
+      roulette
+    </div>
+    <div
       class="container"
     >
       <div
@@ -17,17 +25,23 @@ exports[`NotFoundPage render NotFoundPage 1`] = `
         <span
           class="icon"
         />
-        <a
-          href="/films"
+        <button
+          class="homeButton"
         >
-          <button
-            class="homeButton"
-          >
-            GO BACK TO HOME
-          </button>
-        </a>
+          GO BACK TO HOME
+        </button>
       </div>
     </div>
+    <footer>
+      <div
+        class="logo undefined"
+      >
+        <span>
+          netflix
+        </span>
+        roulette
+      </div>
+    </footer>
   </div>
 </body>
 `;
